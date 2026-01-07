@@ -1,0 +1,100 @@
+### 1. Create a User (Required for Booking)
+# We need a user to make a booking. This endpoint was added for testing purposes.
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "securepassword"
+}
+
+> {%
+    client.global.set("userId", response.body.id);
+    client.log("User created with ID: " + client.global.get("userId"));
+%}
+
+### 2. Create a Venue
+POST http://localhost:8080/venues
+Content-Type: application/json
+
+{
+  "name": "Downtown Sports Complex",
+  "location": "123 Main St, Cityville"
+}
+
+> {%
+    client.global.set("venueId", response.body.id);
+    client.log("Venue created with ID: " + client.global.get("venueId"));
+%}
+
+### 3. List All Venues
+GET http://localhost:8080/venues
+
+### 4. Add a Time Slot (10:00 - 11:00)
+POST http://localhost:8080/venues/{{venueId}}/slots
+Content-Type: application/json
+
+{
+  "startTime": "2026-06-15T10:00:00",
+  "endTime": "2026-06-15T11:00:00"
+}
+
+> {%
+    client.global.set("slotId", response.body.id);
+    client.log("Slot created with ID: " + client.global.get("slotId"));
+%}
+
+### 5. Add Another Time Slot (11:00 - 12:00)
+POST http://localhost:8080/venues/{{venueId}}/slots
+Content-Type: application/json
+
+{
+  "startTime": "2026-06-15T11:00:00",
+  "endTime": "2026-06-15T12:00:00"
+}
+
+### 6. Try to Add Overlapping Slot (Should Fail - 500/400)
+# Overlaps with the first slot (10:30 - 11:30)
+POST http://localhost:8080/venues/{{venueId}}/slots
+Content-Type: application/json
+
+{
+  "startTime": "2026-06-15T10:30:00",
+  "endTime": "2026-06-15T11:30:00"
+}
+
+### 7. Check Availability
+# Should show the slots we just created
+GET http://localhost:8080/venues/available?start=2026-06-15T09:00:00&end=2026-06-15T13:00:00
+
+### 8. Book a Slot
+# Uses the User ID and Slot ID captured from previous steps.
+# Assuming Sport ID 1 exists (synced from external API).
+POST http://localhost:8080/bookings
+Content-Type: application/json
+
+{
+  "user_id": "{{userId}}",
+  "venue_slot_id": {{slotId}},
+  "sport_id": 1
+}
+
+> {%
+    client.global.set("bookingId", response.body.id);
+    client.log("Booking created with ID: " + client.global.get("bookingId"));
+%}
+
+### 9. Check Availability Again
+# The booked slot (10:00-11:00) should NO LONGER appear in the list.
+GET http://localhost:8080/venues/available?start=2026-06-15T09:00:00&end=2026-06-15T13:00:00
+
+### 10. Cancel Booking
+PUT http://localhost:8080/bookings/{{bookingId}}/cancel
+
+### 11. Check Availability After Cancellation
+# The slot should reappear in the list.
+GET http://localhost:8080/venues/available?start=2026-06-15T09:00:00&end=2026-06-15T13:00:00
+
+### 12. Delete Venue
+DELETE http://localhost:8080/venues/{{venueId}}
