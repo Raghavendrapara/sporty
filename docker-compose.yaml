@@ -1,0 +1,51 @@
+services:
+  mysqldb:
+    image: mysql:9.5.0
+    container_name: sports_booking_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sports_booking
+      MYSQL_USER: dev_user
+      MYSQL_PASSWORD: dev_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+    networks:
+      - backend_network
+
+  app:
+    build: .
+    container_name: sports_backend
+    restart: on-failure
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/sports_booking?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: dev_user
+      SPRING_DATASOURCE_PASSWORD: dev_password
+      SPRING_FLYWAY_URL: jdbc:mysql://mysqldb:3306/sports_booking?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_FLYWAY_USER: dev_user
+      SPRING_FLYWAY_PASSWORD: dev_password
+
+    networks:
+      - backend_network
+
+volumes:
+  mysql_data:
+
+networks:
+  backend_network:
+    driver: bridge
