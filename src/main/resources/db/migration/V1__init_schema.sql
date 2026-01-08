@@ -48,3 +48,23 @@ CREATE TABLE bookings (
                           FOREIGN KEY (venue_slot_id) REFERENCES venue_slots(id) ON DELETE CASCADE,
                           FOREIGN KEY (sport_id) REFERENCES sports(id) ON DELETE CASCADE
 );
+
+
+
+-- INDEX
+CREATE INDEX idx_venues_location ON venues(location);
+
+CREATE INDEX idx_slots_start_time ON venue_slots(start_time);
+
+CREATE INDEX idx_sports_name ON sports(name);
+
+-- INIT SPORTS
+
+INSERT INTO sports (name, external_id) VALUES
+                                           ('badminton', '7020104'),
+                                           ('basketball', '7020111'),
+                                           ('cricket', '7031809'),
+                                           ('football', '7061509'),
+                                           ('tennis', '7200514');
+
+

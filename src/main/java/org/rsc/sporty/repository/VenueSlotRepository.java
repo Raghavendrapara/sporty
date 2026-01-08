@@ -32,4 +32,6 @@ public interface VenueSlotRepository extends JpaRepository<VenueSlot, Long> {
             "AND vs.endTime <= :endTime")
     List<VenueSlot> findAvailableSlots(@Param("startTime") LocalDateTime startTime, 
                                        @Param("endTime") LocalDateTime endTime);
+
+    List<VenueSlot> findByVenueId(Long venueId);
 }

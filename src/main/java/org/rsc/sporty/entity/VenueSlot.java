@@ -1,5 +1,6 @@
 package org.rsc.sporty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class VenueSlot {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venue_id", nullable = false)
+    @JsonIgnore
     private Venue venue;
 
     @Column(name = "start_time", nullable = false)

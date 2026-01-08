@@ -2,6 +2,7 @@ package org.rsc.sporty.api;
 
 import lombok.RequiredArgsConstructor;
 import org.rsc.sporty.dto.SlotRequest;
+import org.rsc.sporty.dto.VenueAvailabilityDTO;
 import org.rsc.sporty.dto.VenueRequest;
 import org.rsc.sporty.entity.Venue;
 import org.rsc.sporty.entity.VenueSlot;
@@ -31,11 +32,6 @@ public class VenuesController {
         return new ResponseEntity<>(venueService.addVenue(venue), HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Venue>> getAllVenues() {
-        return ResponseEntity.ok(venueService.getAllVenues());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Venue> getVenueById(@PathVariable Long id) {
         return ResponseEntity.ok(venueService.getVenueById(id));
@@ -45,6 +41,11 @@ public class VenuesController {
     public ResponseEntity<Void> deleteVenue(@PathVariable Long id) {
         venueService.deleteVenue(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{venueId}/slots")
+    public ResponseEntity<List<VenueSlot>> getSlotsForVenue(@PathVariable Long venueId) {
+        return ResponseEntity.ok(venueService.getAllSlotsForVenue(venueId));
     }
 
     @PostMapping("/{venueId}/slots")
@@ -72,6 +73,16 @@ public class VenuesController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping
+    public ResponseEntity<List<Venue>> getAllVenues(@RequestParam(required = false) String location) {
+        if (location != null && !location.isBlank()) {
+            return ResponseEntity.ok(venueService.getVenuesByLocation(location));
+        }
+        return ResponseEntity.ok(venueService.getAllVenues());
+    }
+
+
     
-    public record VenueAvailabilityDTO(Venue venue, List<VenueSlot> availableSlots) {}
+
 }

@@ -8,6 +8,7 @@
 
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
     </root>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">

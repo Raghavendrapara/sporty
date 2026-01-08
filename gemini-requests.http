@@ -79,22 +79,3 @@ Content-Type: application/json
   "venue_slot_id": {{slotId}},
   "sport_id": 1
 }
-
-> {%
-    client.global.set("bookingId", response.body.id);
-    client.log("Booking created with ID: " + client.global.get("bookingId"));
-%}
-
-### 9. Check Availability Again
-# The booked slot (10:00-11:00) should NO LONGER appear in the list.
-GET http://localhost:8080/venues/available?start=2026-06-15T09:00:00&end=2026-06-15T13:00:00
-
-### 10. Cancel Booking
-PUT http://localhost:8080/bookings/{{bookingId}}/cancel
-
-### 11. Check Availability After Cancellation
-# The slot should reappear in the list.
-GET http://localhost:8080/venues/available?start=2026-06-15T09:00:00&end=2026-06-15T13:00:00
-
-### 12. Delete Venue
-DELETE http://localhost:8080/venues/{{venueId}}

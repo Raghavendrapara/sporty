@@ -70,4 +70,12 @@ public class VenueService {
     public List<VenueSlot> findAvailableSlots(LocalDateTime start, LocalDateTime end) {
         return venueSlotRepository.findAvailableSlots(start, end);
     }
+
+    public List<Venue> getVenuesByLocation(String location) {
+        return venueRepository.findByLocation(location);
+    }
+
+    public List<VenueSlot> getAllSlotsForVenue(Long venueId) {
+        return venueSlotRepository.findByVenueId(venueId);
+    }
 }
