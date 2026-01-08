@@ -71,7 +71,7 @@ public class SportsSyncService {
                     log.info("Synced {} new sports.", newSports.size());
                 }
             });
-
+            log.info("Finished sports synchronization from {}", apiUrl);
         } catch (Exception e) {
             log.error("Failed to sync sports", e);
         }

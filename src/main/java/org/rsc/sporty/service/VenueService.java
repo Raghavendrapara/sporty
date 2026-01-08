@@ -59,7 +59,7 @@ public class VenueService {
     }
 
     public List<Venue> findAvailableVenues(LocalDateTime start, LocalDateTime end) {
-        List<VenueSlot> availableSlots = venueSlotRepository.findAvailableSlots(start, end);
+        List<VenueSlot> availableSlots = findAvailableSlots(start, end);
         
         return availableSlots.stream()
                 .map(VenueSlot::getVenue)
