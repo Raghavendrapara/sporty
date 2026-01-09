@@ -9,11 +9,13 @@
 #### Bookings currently done via Pessimistic Locking -> preventing multiple bookings at same slot
 #### Added Spring Security, disabled it for running, was revising concepts so thought of adding/learning
 #### UUID v7 is better i learnt for indexing, but using UUUID v4 which works out of the box
+
 ### Continue to add
 #### ToDo Change Location to actual address kinda columns so that searching becomes easier via state/city/area instead of 'LIKE' queries that are time taking
 #### ToDo revisit the calling mechanism of API
 #### ToDo revisit query performance and  scope for improving query performance
 #### ToDo Expand ExceptionHandling and Nice UX(Custom Exceptions)
+#### Move towards hybrid form of querying via JDBC, reducing Hibernate ORM
 
 ### My Current Assessment/Understanding of the desired flow
 #### Venue Owner/StapuBox Admin can add Venues/Slots/
