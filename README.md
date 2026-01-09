@@ -55,7 +55,7 @@ docker run -d \
     mysql:9.0.4
 ```
 ```bash
-mvn spring-boot:run
+JAVA_HOME="C:/Program Files/Java/jdk-25" mvn clean install
 ```
 
 ## Configuration
